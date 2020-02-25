@@ -1,21 +1,66 @@
 
 package pl.mczepan.mgrapp.model.live.football.detail;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "player",
+    "time",
+    "event",
+    "home_away"
+})
 public class Event {
 
-    @SerializedName("id")
-    @Expose
-    private String id;
+    @JsonProperty("player")
+    private String player;
+    @JsonProperty("time")
+    private String time;
+    @JsonProperty("event")
+    private String event;
+    @JsonProperty("home_away")
+    private String homeAway;
 
-    public String getId() {
-        return id;
+    @JsonProperty("player")
+    public String getPlayer() {
+        return player;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @JsonProperty("player")
+    public void setPlayer(String player) {
+        this.player = player;
+    }
+
+    @JsonProperty("time")
+    public String getTime() {
+        return time;
+    }
+
+    @JsonProperty("time")
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    @JsonProperty("event")
+    public String getEvent() {
+        return event;
+    }
+
+    @JsonProperty("event")
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    @JsonProperty("home_away")
+    public String getHomeAway() {
+        return homeAway;
+    }
+
+    @JsonProperty("home_away")
+    public void setHomeAway(String homeAway) {
+        this.homeAway = homeAway;
     }
 
 }

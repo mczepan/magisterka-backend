@@ -61,7 +61,7 @@ public class LiveController {
         return data.getMatch();
     }
 
-    @GetMapping("/football/{gameId}")
+    /*@GetMapping("/football/{gameId}")
     public MatchDetail getFootballGameDetails(@PathVariable String gameId) {
 
         InputStreamReader reader = null;
@@ -76,6 +76,16 @@ public class LiveController {
             e.printStackTrace();
         }
         MatchDetail matchDetail = new Gson().fromJson(reader,MatchDetail.class);
+        return matchDetail;
+    }*/
+
+    @GetMapping("football/{gameId}")
+    public MatchDetail getDetail(@PathVariable Long gameId) {
+        MatchDetail matchDetail = restTemplate.getForObject("https://livescore-api.com/api-client/scores/events.json" +
+                "?key=" + apiFootballKey
+                + "&secret=" + apiFootballSecret
+                + "&id=" + gameId, MatchDetail.class);
+
         return matchDetail;
     }
 }
