@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "vTeam",
         "hTeam"
 })
-public class Game {
+public class BasketballGame {
 
     @JsonProperty("date")
     private String date;

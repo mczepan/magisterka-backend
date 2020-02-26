@@ -1,6 +1,5 @@
 package pl.mczepan.mgrapp.controller;
 
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,17 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import pl.mczepan.mgrapp.model.basketball.Basketball;
-import pl.mczepan.mgrapp.model.live.basketball.Game;
+import pl.mczepan.mgrapp.model.live.basketball.BasketballGame;
 import pl.mczepan.mgrapp.model.live.basketball.LiveBasketball;
+import pl.mczepan.mgrapp.model.live.cricket.Cricket;
+import pl.mczepan.mgrapp.model.live.cricket.CricketMatch;
+import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
 import pl.mczepan.mgrapp.model.live.football.Data;
 import pl.mczepan.mgrapp.model.live.football.LiveFootball;
 import pl.mczepan.mgrapp.model.live.football.Match;
 import pl.mczepan.mgrapp.model.live.football.detail.MatchDetail;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,16 +35,19 @@ public class LiveController {
     @Value("${api.football.secret}")
     private String apiFootballSecret;
 
+    @Value("${api.cricket.key}")
+    private String apiCricketKey;
+
     @GetMapping("/basketball")
-    public List<Game> getBasketballLiveResult() {
+    public List<BasketballGame> getBasketballLiveResult() {
 
         String currentScoreboard = restTemplate.getForObject("http://data.nba.net/10s/prod/v1/today.json", Basketball.class).getLinks().getCurrentScoreboard();
-        List<Game> games = restTemplate.getForObject("http://data.nba.net/10s" + currentScoreboard, LiveBasketball.class).getGames();
+        List<BasketballGame> games = restTemplate.getForObject("http://data.nba.net/10s" + currentScoreboard, LiveBasketball.class).getBasketballGames();
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
 
-        for (Game game : games) {
+        for (BasketballGame game : games) {
             game.setDate(formatter.format(date));
         }
         return games;
@@ -61,31 +62,26 @@ public class LiveController {
         return data.getMatch();
     }
 
-    /*@GetMapping("/football/{gameId}")
-    public MatchDetail getFootballGameDetails(@PathVariable String gameId) {
-
-        InputStreamReader reader = null;
-        try {
-            URL url = new URL("https://livescore-api.com/api-client/scores/live.json?key=" + apiFootballKey
-                    + "&secret=" + apiFootballSecret
-                    + "&id=" + gameId);
-            reader = new InputStreamReader(url.openStream());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        MatchDetail matchDetail = new Gson().fromJson(reader,MatchDetail.class);
-        return matchDetail;
-    }*/
-
     @GetMapping("football/{gameId}")
-    public MatchDetail getDetail(@PathVariable Long gameId) {
+    public MatchDetail getFootballDetail(@PathVariable Long gameId) {
         MatchDetail matchDetail = restTemplate.getForObject("https://livescore-api.com/api-client/scores/events.json" +
                 "?key=" + apiFootballKey
                 + "&secret=" + apiFootballSecret
                 + "&id=" + gameId, MatchDetail.class);
 
         return matchDetail;
+    }
+
+    @GetMapping("cricket")
+    public List<CricketMatch> getCricketGames() {
+        return restTemplate.getForObject("https://cricapi.com/api/matches?apikey="
+                + apiCricketKey, Cricket.class).getCricketMatches();
+    }
+
+    @GetMapping("cricket/{gameId}")
+    public CricketDetail getCricketDetail(@PathVariable Long gameId) {
+        return restTemplate.getForObject("https://cricapi.com/api/cricketScore"
+                +"?apikey="+apiCricketKey
+                +"&unique_id="+gameId,CricketDetail.class);
     }
 }

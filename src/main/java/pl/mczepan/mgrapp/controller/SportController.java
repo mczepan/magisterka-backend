@@ -20,7 +20,6 @@ public class SportController {
 
     @GetMapping()
     public List<Sport> getSportTypes() {
-
         SportType sport = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/1/all_sports.php", SportType.class);
 
         return sport.getSports()
