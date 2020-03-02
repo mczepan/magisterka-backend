@@ -31,6 +31,8 @@ public class Sport {
     private String strSportThumb;
     @JsonProperty("strSportDescription")
     private String strSportDescription;
+    @JsonProperty("provideLiveResult")
+    private boolean provideLiveResult;
 
 
     @JsonProperty("idSport")
@@ -81,5 +83,15 @@ public class Sport {
     @JsonProperty("strSportDescription")
     public void setStrSportDescription(String strSportDescription) {
         this.strSportDescription = strSportDescription;
+    }
+
+    @JsonProperty("provideLiveResult")
+    public boolean isProvideLiveResult() {
+        return provideLiveResult;
+    }
+
+    @JsonProperty("provideLiveResult")
+    public void setProvideLiveResult(boolean provideLiveResult) {
+        this.provideLiveResult = provideLiveResult;
     }
 }

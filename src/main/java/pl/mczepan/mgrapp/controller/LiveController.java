@@ -2,14 +2,13 @@ package pl.mczepan.mgrapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pl.mczepan.mgrapp.model.basketball.Basketball;
 import pl.mczepan.mgrapp.model.live.basketball.BasketballGame;
 import pl.mczepan.mgrapp.model.live.basketball.LiveBasketball;
+import pl.mczepan.mgrapp.model.live.basketball.boxscore.BasicGameData;
+import pl.mczepan.mgrapp.model.live.basketball.boxscore.BasketballBoxscore;
 import pl.mczepan.mgrapp.model.live.cricket.Cricket;
 import pl.mczepan.mgrapp.model.live.cricket.CricketMatch;
 import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
@@ -17,17 +16,20 @@ import pl.mczepan.mgrapp.model.live.football.Data;
 import pl.mczepan.mgrapp.model.live.football.LiveFootball;
 import pl.mczepan.mgrapp.model.live.football.Match;
 import pl.mczepan.mgrapp.model.live.football.detail.MatchDetail;
+import pl.mczepan.mgrapp.service.BasketballService;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = "/api/live")
 public class LiveController {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    BasketballService basketballService;
 
     @Value("${api.football.key}")
     private String apiFootballKey;
@@ -39,18 +41,28 @@ public class LiveController {
     private String apiCricketKey;
 
     @GetMapping("/basketball")
-    public List<BasketballGame> getBasketballLiveResult() {
+    public LiveBasketball getBasketballLiveResult() {
 
         String currentScoreboard = restTemplate.getForObject("http://data.nba.net/10s/prod/v1/today.json", Basketball.class).getLinks().getCurrentScoreboard();
         List<BasketballGame> games = restTemplate.getForObject("http://data.nba.net/10s" + currentScoreboard, LiveBasketball.class).getBasketballGames();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
+        LiveBasketball liveBasketball = new LiveBasketball();
+        liveBasketball.setBasketballGames(games);
 
-        for (BasketballGame game : games) {
-            game.setDate(formatter.format(date));
-        }
-        return games;
+        liveBasketball.setBasketballGames(basketballService.setBasketballLogo(liveBasketball.getBasketballGames()));
+        return liveBasketball;
+    }
+
+    @GetMapping("/basketball/{gameDate}/{gameId}")
+    public BasketballBoxscore getBasketballGameDetail(@PathVariable String gameDate,
+                                                      @PathVariable String gameId) {
+        BasicGameData basicGameData = restTemplate.getForObject("http://data.nba.net/prod/v1/"+
+                gameDate + "/" + gameId + "_boxscore.json", BasketballBoxscore.class).getBasicGameData();
+
+        BasketballBoxscore basketballBoxscore = new BasketballBoxscore();
+
+        basketballBoxscore.setBasicGameData(basketballService.setBasketballLogoDetailsInfo(basicGameData));
+        return basketballBoxscore;
     }
 
     @GetMapping("/football")

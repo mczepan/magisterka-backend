@@ -1,29 +1,26 @@
 
-package pl.mczepan.mgrapp.model.live.basketball;
+package pl.mczepan.mgrapp.model.live.basketball.boxscore;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "triCode",
-        "score"
+    "triCode",
+    "score",
+    "linescoreVTeam"
 })
-public class HTeam {
+public class VTeamScore {
 
+    private String logoPath;
     @JsonProperty("triCode")
     private String triCode;
     @JsonProperty("score")
     private String score;
-    @JsonProperty("logo")
-    private String logo;
+    @JsonProperty("linescore")
+    private List<LinescoreVTeam> linescoreVTeam = null;
 
     @JsonProperty("triCode")
     public String getTriCode() {
@@ -45,13 +42,21 @@ public class HTeam {
         this.score = score;
     }
 
-    @JsonProperty("logo")
-    public String getLogo() {
-        return logo;
+    @JsonProperty("linescore")
+    public List<LinescoreVTeam> getLinescoreVTeam() {
+        return linescoreVTeam;
     }
 
-    @JsonProperty("logo")
-    public void setLogo(String logo) {
-        this.logo = logo;
+    @JsonProperty("linescore")
+    public void setLinescoreVTeam(List<LinescoreVTeam> linescoreVTeam) {
+        this.linescoreVTeam = linescoreVTeam;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 }

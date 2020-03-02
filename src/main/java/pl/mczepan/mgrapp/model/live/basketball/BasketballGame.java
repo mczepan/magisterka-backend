@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class BasketballGame {
 
-    @JsonProperty("date")
+    @JsonProperty("homeStartDate")
     private String date;
     @JsonProperty("isGameActivated")
     private Boolean isGameActivated;
@@ -31,13 +31,25 @@ public class BasketballGame {
     private VTeam vTeam;
     @JsonProperty("hTeam")
     private HTeam hTeam;
+    @JsonProperty("gameId")
+    private String gameId;
 
-    @JsonProperty("date")
+    @JsonProperty("gameId")
+    public String getGameId() {
+        return gameId;
+    }
+
+    @JsonProperty("gameId")
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    @JsonProperty("homeStartDate")
     public String getDate() {
         return date;
     }
 
-    @JsonProperty("date")
+    @JsonProperty("homeStartDate")
     public void setDate(String date) {
         this.date = date;
     }
