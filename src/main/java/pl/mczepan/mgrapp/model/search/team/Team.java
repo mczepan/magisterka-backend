@@ -50,6 +50,8 @@ public class Team {
     private String strInstagram;
     @JsonProperty("strDescriptionEN")
     private String strDescriptionEN;
+    @JsonProperty("strTeamBadge")
+    private String strTeamBadge;
 
     @JsonProperty("idTeam")
     public String getIdTeam() {
@@ -191,4 +193,13 @@ public class Team {
         this.strDescriptionEN = strDescriptionEN;
     }
 
+    @JsonProperty("strTeamBadge")
+    public String getStrTeamBadge() {
+        return strTeamBadge;
+    }
+
+    @JsonProperty("strTeamBadge")
+    public void setStrTeamBadge(String strTeamBadge) {
+        this.strTeamBadge = strTeamBadge;
+    }
 }

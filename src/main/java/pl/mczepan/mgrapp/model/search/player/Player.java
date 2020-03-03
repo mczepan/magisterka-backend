@@ -64,6 +64,9 @@ public class Player {
     private String strTwitter;
     @JsonProperty("strInstagram")
     private String strInstagram;
+    @JsonProperty("strThumb")
+    private String strThumb;
+
 
     @JsonProperty("idPlayer")
     public String getIdPlayer() {
@@ -245,4 +248,13 @@ public class Player {
         this.strInstagram = strInstagram;
     }
 
+    @JsonProperty("strThumb")
+    public String getStrThumb() {
+        return strThumb;
+    }
+
+    @JsonProperty("strThumb")
+    public void setStrThumb(String strThumb) {
+        this.strThumb = strThumb;
+    }
 }
