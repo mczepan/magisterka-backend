@@ -52,6 +52,10 @@ public class Team {
     private String strDescriptionEN;
     @JsonProperty("strTeamBadge")
     private String strTeamBadge;
+    @JsonProperty("strYoutube")
+    private String strYoutube;
+    @JsonProperty("strTeamJersey")
+    private String strTeamJersey;
 
     @JsonProperty("idTeam")
     public String getIdTeam() {
@@ -201,5 +205,25 @@ public class Team {
     @JsonProperty("strTeamBadge")
     public void setStrTeamBadge(String strTeamBadge) {
         this.strTeamBadge = strTeamBadge;
+    }
+
+    @JsonProperty("strYoutube")
+    public String getStrYoutube() {
+        return strYoutube;
+    }
+
+    @JsonProperty("strYoutube")
+    public void setStrYoutube(String strYoutube) {
+        this.strYoutube = strYoutube;
+    }
+
+    @JsonProperty("strTeamJersey")
+    public String getStrTeamJersey() {
+        return strTeamJersey;
+    }
+
+    @JsonProperty("strTeamJersey")
+    public void setStrTeamJersey(String strTeamJersey) {
+        this.strTeamJersey = strTeamJersey;
     }
 }

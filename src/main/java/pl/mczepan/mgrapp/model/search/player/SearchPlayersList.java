@@ -1,26 +1,27 @@
 
 package pl.mczepan.mgrapp.model.search.player;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "player"
 })
-public class SearchPlayerList {
+public class SearchPlayersList {
 
-    @JsonProperty("players")
+    @JsonProperty("player")
     private List<Player> player = null;
 
-    @JsonProperty("players")
+    @JsonProperty("player")
     public List<Player> getPlayer() {
         return player;
     }
 
-    @JsonProperty("players")
+    @JsonProperty("player")
     public void setPlayer(List<Player> player) {
         this.player = player;
     }
