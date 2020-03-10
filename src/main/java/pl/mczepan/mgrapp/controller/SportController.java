@@ -5,14 +5,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pl.mczepan.mgrapp.model.Sport;
 import pl.mczepan.mgrapp.model.SportType;
+import pl.mczepan.mgrapp.model.basketball.Basketball;
+import pl.mczepan.mgrapp.model.basketball.team.Standard;
+import pl.mczepan.mgrapp.model.basketball.team.TeamBasketball;
 import pl.mczepan.mgrapp.model.league.League;
 import pl.mczepan.mgrapp.model.league.LeagueList;
 import pl.mczepan.mgrapp.model.league.country.CountryLeague;
 import pl.mczepan.mgrapp.model.league.country.CountryLeagueList;
 import pl.mczepan.mgrapp.model.league.table.Table;
 import pl.mczepan.mgrapp.model.league.table.TableLeagueList;
+import pl.mczepan.mgrapp.model.league.table.basketball.BasketballStandings;
+import pl.mczepan.mgrapp.model.league.table.basketball.East;
+import pl.mczepan.mgrapp.model.league.table.basketball.West;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,5 +96,35 @@ public class SportController {
         return restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?" +
                 "l=" + leagueTableId
                 +"&s=1920", TableLeagueList.class).getTable();
+    }
+
+
+    @GetMapping("/league/table/nba")
+    public BasketballStandings getLeagueTable() {
+        String basePath = "assets/logo/basketball/";
+        BasketballStandings standings = restTemplate.getForObject("http://data.nba.net/prod/v1/current/standings_conference.json", BasketballStandings.class);
+        for(East eastTeam: standings.getLeague().getStandard().getConference().getEast()) {
+            eastTeam.setLogoPath(basePath + eastTeam.getTeamSitesOnly().getTeamTricode());
+        }
+        for(West westTeam: standings.getLeague().getStandard().getConference().getWest()) {
+            westTeam.setLogoPath(basePath + westTeam.getTeamSitesOnly().getTeamTricode());
+        }
+        return standings;
+    }
+
+    @GetMapping("/basketball/team")
+    public TeamBasketball getBasketballTeams() {
+        String basePath = "assets/logo/basketball/";
+        TeamBasketball teams = restTemplate.getForObject("http://data.nba.net/prod/v2/2019/teams.json", TeamBasketball.class);
+
+        List<Standard> nbaTeams = new ArrayList();
+        for(Standard tempTeam: teams.getLeague().getStandard()) {
+            tempTeam.setLogoPath(basePath + tempTeam.getTricode() + ".png");
+            if(tempTeam.getIsNBAFranchise()) {
+                nbaTeams.add(tempTeam);
+            }
+        }
+        teams.getLeague().setStandard(nbaTeams);
+        return teams;
     }
 }
