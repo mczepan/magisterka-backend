@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Teams {
 
-    /*
+
     @JsonProperty("Match")
     private List<Match> match = null;
 
@@ -25,7 +25,7 @@ public class Teams {
     public void setMatch(List<Match> match) {
         this.match = match;
     }
-     */
+     /*
     @JsonProperty("Match")
     private Match match = null;
 
@@ -37,6 +37,6 @@ public class Teams {
     @JsonProperty("Match")
     public void setMatch(Match match) {
         this.match = match;
-    }
+    }*/
 
 }
