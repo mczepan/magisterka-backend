@@ -8,20 +8,34 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "match"
+    "Match"
 })
-public class Data {
+public class Teams {
 
-    @JsonProperty("match")
+    /*
+    @JsonProperty("Match")
     private List<Match> match = null;
 
-    @JsonProperty("match")
+    @JsonProperty("Match")
     public List<Match> getMatch() {
         return match;
     }
 
-    @JsonProperty("match")
+    @JsonProperty("Match")
     public void setMatch(List<Match> match) {
+        this.match = match;
+    }
+     */
+    @JsonProperty("Match")
+    private Match match = null;
+
+    @JsonProperty("Match")
+    public Match getMatch() {
+        return match;
+    }
+
+    @JsonProperty("Match")
+    public void setMatch(Match match) {
         this.match = match;
     }
 

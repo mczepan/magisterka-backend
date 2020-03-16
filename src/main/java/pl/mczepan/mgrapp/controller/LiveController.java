@@ -12,10 +12,8 @@ import pl.mczepan.mgrapp.model.live.basketball.boxscore.BasketballBoxscore;
 import pl.mczepan.mgrapp.model.live.cricket.Cricket;
 import pl.mczepan.mgrapp.model.live.cricket.CricketMatch;
 import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
-import pl.mczepan.mgrapp.model.live.football.Data;
-import pl.mczepan.mgrapp.model.live.football.LiveFootball;
-import pl.mczepan.mgrapp.model.live.football.Match;
-import pl.mczepan.mgrapp.model.live.football.detail.MatchDetail;
+
+import pl.mczepan.mgrapp.model.live.football.FootballMatch;
 import pl.mczepan.mgrapp.service.BasketballService;
 
 import java.util.List;
@@ -34,8 +32,6 @@ public class LiveController {
     @Value("${api.football.key}")
     private String apiFootballKey;
 
-    @Value("${api.football.secret}")
-    private String apiFootballSecret;
 
     @Value("${api.cricket.key}")
     private String apiCricketKey;
@@ -66,14 +62,14 @@ public class LiveController {
     }
 
     @GetMapping("/football")
-    public List<Match> getFootballLiveResult() {
+    public
 
-        Data data = restTemplate.getForObject("https://livescore-api.com/api-client/scores/live.json?key=" + apiFootballKey
-                + "&secret=" + apiFootballSecret, LiveFootball.class).getData();
+    FootballMatch getFootballLiveResult() {
 
-        return data.getMatch();
+        return restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" + apiFootballKey + "/latestsoccer.php", FootballMatch.class);
     }
 
+    /*
     @GetMapping("football/{gameId}")
     public MatchDetail getFootballDetail(@PathVariable Long gameId) {
         MatchDetail matchDetail = restTemplate.getForObject("https://livescore-api.com/api-client/scores/events.json" +
@@ -82,7 +78,7 @@ public class LiveController {
                 + "&id=" + gameId, MatchDetail.class);
 
         return matchDetail;
-    }
+    }*/
 
     @GetMapping("cricket")
     public List<CricketMatch> getCricketGames() {
