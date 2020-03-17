@@ -14,8 +14,10 @@ import pl.mczepan.mgrapp.model.live.cricket.CricketMatch;
 import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
 
 import pl.mczepan.mgrapp.model.live.football.FootballMatch;
+import pl.mczepan.mgrapp.model.live.football.Match;
 import pl.mczepan.mgrapp.service.BasketballService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:4200")
@@ -62,11 +64,19 @@ public class LiveController {
     }
 
     @GetMapping("/football")
-    public
-
-    FootballMatch getFootballLiveResult() {
-
+    public FootballMatch getFootballLiveResult() {
         return restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" + apiFootballKey + "/latestsoccer.php", FootballMatch.class);
+    }
+
+    @GetMapping("/football/{gameId}")
+    public FootballMatch getFootballLiveResult(@PathVariable String gameId) {
+
+        FootballMatch footballMatch =  restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" + apiFootballKey + "/latestsoccer.php", FootballMatch.class);
+
+        ArrayList<Match> gameDetails = new ArrayList<>();
+        gameDetails.add(footballMatch.getTeams().getMatch().get(Integer.parseInt(gameId)));
+        footballMatch.getTeams().setMatch(gameDetails);
+        return footballMatch;
     }
 
     /*
