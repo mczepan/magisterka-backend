@@ -1,14 +1,11 @@
 
 package pl.mczepan.mgrapp.model.live.football;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import pl.mczepan.mgrapp.MyJsonDeserializer.MyDes;
-
-import java.util.Map;
+import pl.mczepan.mgrapp.MyJsonDeserializer.MatchDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({
@@ -47,91 +44,91 @@ public class Match {
 
     @JsonProperty("Date")
     private String date;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("League")
     private String league;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("Round")
     private String round;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeTeam")
     private String homeTeam;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeTeam_Id")
     private String homeTeamId;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayTeam")
     private String awayTeam;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayTeam_Id")
     private String awayTeamId;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("Time")
     private String time;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeGoals")
     private String homeGoals;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayGoals")
     private String awayGoals;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeGoalDetails")
     private String homeGoalDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayGoalDetails")
     private String awayGoalDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeLineupGoalkeeper")
     private String homeLineupGoalkeeper;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayLineupGoalkeeper")
     private String awayLineupGoalkeeper;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeLineupDefense")
     private String homeLineupDefense;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayLineupDefense")
     private String awayLineupDefense;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeLineupMidfield")
     private String homeLineupMidfield;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayLineupMidfield")
     private String awayLineupMidfield;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeLineupForward")
     private String homeLineupForward;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayLineupForward")
     private String awayLineupForward;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeLineupSubstitutes")
     private String homeLineupSubstitutes;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayLineupSubstitutes")
     private String awayLineupSubstitutes;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeSubDetails")
     private String homeSubDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwaySubDetails")
     private String awaySubDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("Location")
     private String location;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("Stadium")
     private String stadium;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeTeamYellowCardDetails")
     private String homeTeamYellowCardDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayTeamYellowCardDetails")
     private String awayTeamYellowCardDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("HomeTeamRedCardDetails")
     private String homeTeamRedCardDetails;
-    @JsonDeserialize(using = MyDes.class)
+    @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayTeamRedCardDetails")
     private String awayTeamRedCardDetails;
 
