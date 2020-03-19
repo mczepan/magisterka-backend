@@ -1,9 +1,10 @@
 
-package pl.mczepan.mgrapp.model.league.table;
+package pl.mczepan.mgrapp.model.league.table.football.TableDetail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import pl.mczepan.mgrapp.model.search.team.Team;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -40,6 +41,7 @@ public class Table {
     private Integer loss;
     @JsonProperty("total")
     private Integer total;
+    private Team team;
 
     @JsonProperty("name")
     public String getName() {
@@ -141,4 +143,11 @@ public class Table {
         this.total = total;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

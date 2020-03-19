@@ -1,5 +1,5 @@
 
-package pl.mczepan.mgrapp.model.league.table;
+package pl.mczepan.mgrapp.model.league.table.football.TableDetail;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;

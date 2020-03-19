@@ -79,16 +79,6 @@ public class LiveController {
         return footballMatch;
     }
 
-    /*
-    @GetMapping("football/{gameId}")
-    public MatchDetail getFootballDetail(@PathVariable Long gameId) {
-        MatchDetail matchDetail = restTemplate.getForObject("https://livescore-api.com/api-client/scores/events.json" +
-                "?key=" + apiFootballKey
-                + "&secret=" + apiFootballSecret
-                + "&id=" + gameId, MatchDetail.class);
-
-        return matchDetail;
-    }*/
 
     @GetMapping("cricket")
     public List<CricketMatch> getCricketGames() {
