@@ -1,4 +1,4 @@
-package pl.mczepan.mgrapp.model.user;
+package pl.mczepan.mgrapp.model.user.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,14 +14,13 @@ public class DAOUser {
     @Column
     private String username;
     @Column
-    @JsonIgnore
     private String password;
     @Column
-    @JsonIgnore
     private int teamID;
     @Column
-    @JsonIgnore
     private boolean enabled;
+    @Column
+    private String email;
 
     public String getUsername() {
         return username;
@@ -53,5 +52,21 @@ public class DAOUser {
 
     public void setEnable(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

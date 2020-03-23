@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import pl.mczepan.mgrapp.MyJsonDeserializer.MatchDeserializer;
+import pl.mczepan.mgrapp.model.search.team.Team;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({
@@ -131,6 +132,9 @@ public class Match {
     @JsonDeserialize(using = MatchDeserializer.class)
     @JsonProperty("AwayTeamRedCardDetails")
     private String awayTeamRedCardDetails;
+
+    private Team homeTeamDetail;
+    private Team awayTeamDetail;
 
 
     @JsonProperty("Date")
@@ -431,5 +435,29 @@ public class Match {
     @JsonProperty("AwayTeamRedCardDetails")
     public void setAwayTeamRedCardDetails(String awayTeamRedCardDetails) {
         this.awayTeamRedCardDetails = awayTeamRedCardDetails;
+    }
+
+    public void setHomeTeamDetails(Team homeTeam) {
+        this.homeTeamDetail = homeTeam;
+    }
+
+    public void setAwayTeamDetails(Team awayTeam) {
+        this.awayTeamDetail = awayTeam;
+    }
+
+    public Team getHomeTeamDetail() {
+        return homeTeamDetail;
+    }
+
+    public void setHomeTeamDetail(Team homeTeamDetail) {
+        this.homeTeamDetail = homeTeamDetail;
+    }
+
+    public Team getAwayTeamDetail() {
+        return awayTeamDetail;
+    }
+
+    public void setAwayTeamDetail(Team awayTeamDetail) {
+        this.awayTeamDetail = awayTeamDetail;
     }
 }

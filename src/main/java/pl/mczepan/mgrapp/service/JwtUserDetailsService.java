@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.mczepan.mgrapp.model.user.DAOUser;
+import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 import pl.mczepan.mgrapp.model.user.dto.UserDTO;
 import pl.mczepan.mgrapp.repository.UserDao;
 
@@ -34,8 +34,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     public DAOUser save(UserDTO user) {
         DAOUser newUser = new DAOUser();
         newUser.setUsername(user.getUsername());
-        newUser.setEnable(true);
+        newUser.setEnable(false);
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        newUser.setEmail(user.getEmail());
 
         DAOUser u = userDao.save(newUser);
         return u;

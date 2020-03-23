@@ -15,6 +15,8 @@ import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
 
 import pl.mczepan.mgrapp.model.live.football.FootballMatch;
 import pl.mczepan.mgrapp.model.live.football.Match;
+import pl.mczepan.mgrapp.model.search.team.SearchTeamList;
+import pl.mczepan.mgrapp.model.search.team.Team;
 import pl.mczepan.mgrapp.service.BasketballService;
 
 import java.util.ArrayList;
@@ -76,6 +78,18 @@ public class LiveController {
         ArrayList<Match> gameDetails = new ArrayList<>();
         gameDetails.add(footballMatch.getTeams().getMatch().get(Integer.parseInt(gameId)));
         footballMatch.getTeams().setMatch(gameDetails);
+
+        Team homeTeam = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                apiFootballKey + "/lookupteam.php?" +
+                "id=" + footballMatch.getTeams().getMatch().get(0).getHomeTeamId(), SearchTeamList.class).getTeams().get(0);
+
+        Team awayTeam = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                apiFootballKey + "/lookupteam.php?" +
+                "id=" + footballMatch.getTeams().getMatch().get(0).getAwayTeamId(), SearchTeamList.class).getTeams().get(0);
+
+        footballMatch.getTeams().getMatch().get(0).setHomeTeamDetails(homeTeam);
+        footballMatch.getTeams().getMatch().get(0).setAwayTeamDetails(awayTeam);
+
         return footballMatch;
     }
 

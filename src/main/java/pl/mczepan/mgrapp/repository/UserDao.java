@@ -2,7 +2,7 @@ package pl.mczepan.mgrapp.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.mczepan.mgrapp.model.user.DAOUser;
+import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 
 @Repository
 public interface UserDao extends CrudRepository<DAOUser, Integer> {
