@@ -62,7 +62,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         token.setUser(appUser);
         tokenRepo.save(token);
 
-        String url = "http://localhost:8080/api/login/token?value=" + tokenValue;
+        String url = "http://localhost:4200/login/token?value=" + tokenValue;
 
         try {
             mailService.sendMail(appUser.getEmail(),"Account Verification",url,false);
