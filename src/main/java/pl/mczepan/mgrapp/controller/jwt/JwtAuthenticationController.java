@@ -7,17 +7,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import pl.mczepan.mgrapp.config.JwtTokenUtil;
 import pl.mczepan.mgrapp.model.jwt.JwtRequest;
 import pl.mczepan.mgrapp.model.jwt.JwtResponse;
+import pl.mczepan.mgrapp.model.token.MailToken;
+import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 import pl.mczepan.mgrapp.model.user.dto.UserDTO;
+import pl.mczepan.mgrapp.repository.TokenRepo;
+import pl.mczepan.mgrapp.repository.UserRepo;
 import pl.mczepan.mgrapp.service.JwtUserDetailsService;
 
 @RestController
@@ -33,6 +33,12 @@ public class JwtAuthenticationController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private TokenRepo tokenRepo;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -52,8 +58,23 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 
+
+    @RequestMapping(value = "/token", method = RequestMethod.GET)
+    public String tokenVerification(@RequestParam String value) {
+       MailToken byValue = tokenRepo.findByValue(value);
+
+       DAOUser user = byValue.getUser();
+       user.setEnabled(true);
+
+        userRepo.save(user);
+        return "authenticate";
+    }
+
     private void authenticate(String username, String password) throws Exception {
         try {
+            if(!userRepo.findByUsername(username).isEnabled()) {
+                throw new DisabledException("USER_DISABLED");
+            }
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);

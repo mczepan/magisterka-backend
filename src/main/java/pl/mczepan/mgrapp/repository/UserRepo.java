@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 
 @Repository
-public interface UserDao extends CrudRepository<DAOUser, Integer> {
+public interface UserRepo extends CrudRepository<DAOUser, Integer> {
     DAOUser findByUsername(String username);
 }

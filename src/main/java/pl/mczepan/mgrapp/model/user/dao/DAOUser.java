@@ -46,10 +46,6 @@ public class DAOUser {
         this.teamID = teamID;
     }
 
-    public boolean isEnable() {
-        return enabled;
-    }
-
     public void setEnable(boolean enabled) {
         this.enabled = enabled;
     }
