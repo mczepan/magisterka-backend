@@ -14,6 +14,8 @@ import pl.mczepan.mgrapp.repository.UserRepo;
 import pl.mczepan.mgrapp.service.mail.MailService;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -42,7 +44,19 @@ public class JwtUserDetailsService implements UserDetailsService {
                 new ArrayList<>());
     }
 
-    public DAOUser save(UserDTO user) {
+    public DAOUser save(UserDTO user) throws Exception {
+        if (userRepo.findByUsername(user.getUsername()) != null) {
+            throw new Exception("User with provided username exists");
+        }
+
+        if (isValidEmailAddress(user.getEmail())) {
+            throw new Exception("Invalid email");
+        }
+
+        if (userRepo.findByEmail(user.getEmail()) != null) {
+            throw new Exception("User with provided email exists");
+        }
+
         DAOUser newUser = new DAOUser();
         newUser.setUsername(user.getUsername());
         newUser.setEnable(false);
@@ -52,6 +66,17 @@ public class JwtUserDetailsService implements UserDetailsService {
         DAOUser appUser = userRepo.save(newUser);
         sendToken(appUser);
         return appUser;
+    }
+
+    public static boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
     }
 
     private void sendToken(DAOUser appUser) {
@@ -65,7 +90,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         String url = "http://localhost:4200/login/token?value=" + tokenValue;
 
         try {
-            mailService.sendMail(appUser.getEmail(),"Account Verification",url,false);
+            mailService.sendMail(appUser.getEmail(), "Account Verification", url, false);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
