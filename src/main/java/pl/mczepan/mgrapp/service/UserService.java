@@ -6,15 +6,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.mczepan.mgrapp.model.search.team.SearchTeamList;
 import pl.mczepan.mgrapp.model.search.team.Team;
+import pl.mczepan.mgrapp.model.user.FavouriteTeamNextEvent.NextEvent;
+import pl.mczepan.mgrapp.model.user.FavouriteTeamNextEvent.FavTeamNextEvent;
+import pl.mczepan.mgrapp.model.user.FavouriteTeamPastEvent.FavTeamLastEvent;
+import pl.mczepan.mgrapp.model.user.FavouriteTeamPastEvent.LastResult;
 import pl.mczepan.mgrapp.model.user.dao.DAOTeam;
 import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 import pl.mczepan.mgrapp.model.user.dto.TeamDTO;
+import pl.mczepan.mgrapp.model.user.FavouriteTeam.FavTeam;
+import pl.mczepan.mgrapp.model.user.FavouriteTeam.Player;
 import pl.mczepan.mgrapp.repository.TeamRepo;
 import pl.mczepan.mgrapp.repository.UserRepo;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -36,7 +43,7 @@ public class UserService {
         DAOUser user = userRepo.findByUsername(principal.getName());
 
         List<TeamDTO> teams = new ArrayList<>();
-        for(DAOTeam tmpTeam: user.getTeams()) {
+        for (DAOTeam tmpTeam : user.getTeams()) {
             TeamDTO t = new TeamDTO();
             t.setTeamID(tmpTeam.getTeamId());
 
@@ -49,7 +56,7 @@ public class UserService {
     private List<Team> getTeamsById(List<TeamDTO> teamsDTO) {
         List<Team> teams = new ArrayList<>();
 
-        for(TeamDTO tmpTeamID: teamsDTO) {
+        for (TeamDTO tmpTeamID : teamsDTO) {
             teams.add(restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
                     apiFootballKey + "/lookupteam.php?" +
                     "id=" + tmpTeamID.getTeamID(), SearchTeamList.class).getTeams().get(0));
@@ -59,7 +66,7 @@ public class UserService {
 
 
     public List<Team> deleteFavTeam(String teamId, Principal principal) {
-        teamRepo.deleteByTeamId(teamId,userRepo.findByUsername(principal.getName()));
+        teamRepo.deleteByTeamId(teamId, userRepo.findByUsername(principal.getName()));
         return getFavTeams(principal);
     }
 
@@ -69,7 +76,7 @@ public class UserService {
 
         boolean found = userTeams.stream()
                 .anyMatch(tmpTeam -> teamId.equals(tmpTeam.getTeamId()));
-        if(found) {
+        if (found) {
             throw new IllegalArgumentException("Team exists as favourite");
         }
 
@@ -77,5 +84,34 @@ public class UserService {
         team.setTeamId(teamId);
         team.setUser(user);
         teamRepo.save(team);
+    }
+
+    public FavTeam getTeam(String teamId) {
+        List<Player> teamPlayers = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                apiFootballKey + "/lookup_all_players.php?" +
+                "id=" + teamId, FavTeam.class).getPlayer();
+
+        List<NextEvent> teamNextEvents = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/"+
+                apiFootballKey +"/eventsnext.php?+" +
+                "id=" + teamId, FavTeamNextEvent.class).getEvents();
+
+        List<LastResult> teamLastResults = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/"+
+                apiFootballKey +"/eventslast.php?+" +
+                "id=" + teamId, FavTeamLastEvent.class).getResults();
+
+        Team favTeamDtl = restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                apiFootballKey + "/lookupteam.php?" +
+                "id=" + teamId, SearchTeamList.class).getTeams().get(0);
+
+        teamPlayers.stream()
+                .sorted((player1, player2) -> player1.getStrPlayer().compareTo(player2.getStrPlayer()))
+                .collect(Collectors.toList());
+
+        FavTeam favTeam = new FavTeam();
+        favTeam.setPlayer(teamPlayers);
+        favTeam.setNextEvents(teamNextEvents);
+        favTeam.setLastResults(teamLastResults);
+        favTeam.setTeamInfo(favTeamDtl);
+        return favTeam;
     }
 }
