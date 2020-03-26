@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.mczepan.mgrapp.model.token.MailToken;
+import pl.mczepan.mgrapp.model.user.dao.DAOTeam;
 import pl.mczepan.mgrapp.model.user.dao.DAOUser;
 import pl.mczepan.mgrapp.model.user.dto.UserDTO;
+import pl.mczepan.mgrapp.repository.TeamRepo;
 import pl.mczepan.mgrapp.repository.TokenRepo;
 import pl.mczepan.mgrapp.repository.UserRepo;
 import pl.mczepan.mgrapp.service.mail.MailService;
@@ -17,6 +19,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,6 +37,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    @Autowired
+    private TeamRepo teamRepo;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         DAOUser user = userRepo.findByUsername(username);
@@ -46,17 +52,18 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public DAOUser save(UserDTO user) throws Exception {
         if (userRepo.findByUsername(user.getUsername()) != null) {
+            String s = userRepo.findByUsername(user.getUsername()).getUsername();
+
             throw new Exception("User with provided username exists");
         }
 
-        if (isValidEmailAddress(user.getEmail())) {
+        if (!isValidEmailAddress(user.getEmail())) {
             throw new Exception("Invalid email");
         }
 
         if (userRepo.findByEmail(user.getEmail()) != null) {
             throw new Exception("User with provided email exists");
         }
-
         DAOUser newUser = new DAOUser();
         newUser.setUsername(user.getUsername());
         newUser.setEnable(false);
@@ -65,6 +72,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         DAOUser appUser = userRepo.save(newUser);
         sendToken(appUser);
+
         return appUser;
     }
 

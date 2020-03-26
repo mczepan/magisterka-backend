@@ -3,7 +3,6 @@ package pl.mczepan.mgrapp.model.user.dto;
 public class UserDTO {
     private String username;
     private String password;
-    private int teamID;
     private boolean enabled;
     private String email;
 
@@ -21,14 +20,6 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getTeamID() {
-        return teamID;
-    }
-
-    public void setTeamID(int teamID) {
-        this.teamID = teamID;
     }
 
     public boolean isEnabled() {

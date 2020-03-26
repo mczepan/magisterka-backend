@@ -3,6 +3,8 @@ package pl.mczepan.mgrapp.model.user.dao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -21,6 +23,11 @@ public class DAOUser {
     private boolean enabled;
     @Column
     private String email;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = {CascadeType.DETACH,CascadeType.MERGE,
+                    CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<DAOTeam> teams;
 
     public String getUsername() {
         return username;
@@ -64,5 +71,24 @@ public class DAOUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<DAOTeam> getTeams() {
+        return teams;
+    }
+
+
+    public void setTeams(List<DAOTeam> teams) {
+        this.teams = teams;
+    }
+
+    public void add(DAOTeam tmpTeam) {
+
+        if(this.teams == null) {
+            teams = new ArrayList<DAOTeam>();
+        }
+
+        teams.add(tmpTeam);
+        tmpTeam.setUser(this);
     }
 }
