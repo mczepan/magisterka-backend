@@ -1,5 +1,8 @@
 package pl.mczepan.mgrapp.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,10 @@ import pl.mczepan.mgrapp.model.user.FavouriteTeam.Player;
 import pl.mczepan.mgrapp.repository.TeamRepo;
 import pl.mczepan.mgrapp.repository.UserRepo;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +110,9 @@ public class UserService {
                 apiFootballKey + "/lookupteam.php?" +
                 "id=" + teamId, SearchTeamList.class).getTeams().get(0);
 
+        teamNextEvents = setTeamsNextEventLogo(teamNextEvents);
+        teamLastResults = setTeamsLastResultLogo(teamLastResults);
+
         teamPlayers.stream()
                 .sorted((player1, player2) -> player1.getStrPlayer().compareTo(player2.getStrPlayer()))
                 .collect(Collectors.toList());
@@ -113,5 +123,67 @@ public class UserService {
         favTeam.setLastResults(teamLastResults);
         favTeam.setTeamInfo(favTeamDtl);
         return favTeam;
+    }
+
+    public List<NextEvent> setTeamsNextEventLogo(List<NextEvent> teamNextEvents) {
+        for(NextEvent tmpEvent: teamNextEvents) {
+            try {
+                URL url = new URL("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupevent.php?" +
+                        "id=" + tmpEvent.getIdEvent()) ;
+                InputStreamReader inputStreamReader = new InputStreamReader(url.openStream());
+                JsonObject jsonObject = new JsonParser().parse(inputStreamReader).getAsJsonObject();
+
+                JsonArray jsonArray = jsonObject.getAsJsonArray("events");
+                JsonObject nestedJsonObject = jsonArray.get(0).getAsJsonObject();
+
+                String homeTeamID = nestedJsonObject.get("idHomeTeam").getAsString();
+                String awayTeamID = nestedJsonObject.get("idAwayTeam").getAsString();
+
+                tmpEvent.setStrHomeTeamBadge(restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupteam.php?" +
+                        "id=" + homeTeamID, SearchTeamList.class).getTeams().get(0).getStrTeamBadge());
+                tmpEvent.setStrAwayTeamBadge(restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupteam.php?" +
+                        "id=" + awayTeamID, SearchTeamList.class).getTeams().get(0).getStrTeamBadge());
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return teamNextEvents;
+    }
+
+    public List<LastResult> setTeamsLastResultLogo(List<LastResult> teamNextEvents) {
+        for(LastResult tmpEvent: teamNextEvents) {
+            try {
+                URL url = new URL("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupevent.php?" +
+                        "id=" + tmpEvent.getIdEvent()) ;
+                InputStreamReader inputStreamReader = new InputStreamReader(url.openStream());
+                JsonObject jsonObject = new JsonParser().parse(inputStreamReader).getAsJsonObject();
+
+                JsonArray jsonArray = jsonObject.getAsJsonArray("events");
+                JsonObject nestedJsonObject = jsonArray.get(0).getAsJsonObject();
+
+                String homeTeamID = nestedJsonObject.get("idHomeTeam").getAsString();
+                String awayTeamID = nestedJsonObject.get("idAwayTeam").getAsString();
+
+                tmpEvent.setStrHomeTeamBadge(restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupteam.php?" +
+                        "id=" + homeTeamID, SearchTeamList.class).getTeams().get(0).getStrTeamBadge());
+                tmpEvent.setStrAwayTeamBadge(restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" +
+                        apiFootballKey + "/lookupteam.php?" +
+                        "id=" + awayTeamID, SearchTeamList.class).getTeams().get(0).getStrTeamBadge());
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return teamNextEvents;
     }
 }

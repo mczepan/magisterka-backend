@@ -7,11 +7,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "strLeague",
-    "strHomeTeam",
-    "strAwayTeam",
-    "dateEvent",
-    "strTime"
+        "idEvent",
+        "strLeague",
+        "strHomeTeam",
+        "strAwayTeam",
+        "dateEvent",
+        "strTime",
+        "strHomeTeamBadge",
+        "strAwayTeamBadge"
 })
 public class NextEvent {
 
@@ -25,6 +28,12 @@ public class NextEvent {
     private String dateEvent;
     @JsonProperty("strTime")
     private String strTime;
+    @JsonProperty("idEvent")
+    private String idEvent;
+    @JsonProperty("strHomeTeamBadge")
+    private String strHomeTeamBadge;
+    @JsonProperty("strAwayTeamBadge")
+    private String strAwayTeamBadge;
 
     @JsonProperty("strLeague")
     public String getStrLeague() {
@@ -74,6 +83,32 @@ public class NextEvent {
     @JsonProperty("strTime")
     public void setStrTime(String strTime) {
         this.strTime = strTime;
+    }
+
+    @JsonProperty("idEvent")
+    public String getIdEvent() {
+        return idEvent;
+    }
+
+    @JsonProperty("idEvent")
+    public void setIdEvent(String idEvent) {
+        this.idEvent = idEvent;
+    }
+
+    public String getStrHomeTeamBadge() {
+        return strHomeTeamBadge;
+    }
+
+    public void setStrHomeTeamBadge(String strHomeTeamBadge) {
+        this.strHomeTeamBadge = strHomeTeamBadge;
+    }
+
+    public String getStrAwayTeamBadge() {
+        return strAwayTeamBadge;
+    }
+
+    public void setStrAwayTeamBadge(String strAwayTeamBadge) {
+        this.strAwayTeamBadge = strAwayTeamBadge;
     }
 
 }
