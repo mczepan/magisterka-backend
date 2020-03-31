@@ -2,8 +2,10 @@ package pl.mczepan.mgrapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.mczepan.mgrapp.model.search.team.SearchTeamList;
 import pl.mczepan.mgrapp.model.search.team.Team;
 import pl.mczepan.mgrapp.model.user.FavouriteTeam.FavTeam;
+import pl.mczepan.mgrapp.model.user.dto.TeamOntDTO;
 import pl.mczepan.mgrapp.service.UserService;
 
 import java.security.Principal;
@@ -36,6 +38,11 @@ public class UserController {
     @RequestMapping(value = "team/{teamId}", method = RequestMethod.GET)
     public FavTeam getTeam(@PathVariable String teamId) {
         return userService.getTeam(teamId);
+    }
+
+    @RequestMapping(value = "team/ontology", method = RequestMethod.POST)
+    public SearchTeamList addTeam(@RequestBody TeamOntDTO teamOntDTO, Principal principal) {
+        return userService.addTeamOntology(teamOntDTO,principal);
     }
 
 
