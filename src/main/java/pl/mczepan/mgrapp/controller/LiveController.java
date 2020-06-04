@@ -15,6 +15,7 @@ import pl.mczepan.mgrapp.model.live.cricket.detail.CricketDetail;
 
 import pl.mczepan.mgrapp.model.live.football.FootballMatch;
 import pl.mczepan.mgrapp.model.live.football.Match;
+import pl.mczepan.mgrapp.model.live.football.V2.EventsList;
 import pl.mczepan.mgrapp.model.search.team.SearchTeamList;
 import pl.mczepan.mgrapp.model.search.team.Team;
 import pl.mczepan.mgrapp.service.BasketballService;
@@ -68,6 +69,12 @@ public class LiveController {
     @GetMapping("/football")
     public FootballMatch getFootballLiveResult() {
         return restTemplate.getForObject("https://www.thesportsdb.com/api/v1/json/" + apiFootballKey + "/latestsoccer.php", FootballMatch.class);
+    }
+
+    @GetMapping("/footballV2")
+    public EventsList getFootballLiveResultV2() {
+        EventsList eventsList = restTemplate.getForObject("https://www.thesportsdb.com/api/v2/json/" + apiFootballKey + "/livescore.php?s=Soccer", EventsList.class);
+        return eventsList;
     }
 
     @GetMapping("/football/{gameId}")
